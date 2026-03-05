@@ -55,9 +55,7 @@ public static class InputHelper
     // The argument 'input' is guaranteed not to be null.
     public static void CheckForNullInput([NotNull] object? input)
     {
-        if (input is null)
-        {
-            // Or your specific logic/Spectre.Console exit strategy
+        if (input is null) {
             throw new ArgumentNullException(nameof(input), "Selection cannot be null.");
         }
     }

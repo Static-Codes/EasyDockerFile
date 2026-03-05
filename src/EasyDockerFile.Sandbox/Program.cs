@@ -22,7 +22,6 @@ CheckForNullInput(family);
 
 
 // Choosing image version
-Console.WriteLine(family.Images.Length);
 var imageNames = family.Images.Select(a => a.FullName);
 CheckForNullInput(imageNames);
 

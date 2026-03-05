@@ -43,7 +43,9 @@ public class DebianManifest
 
     public override string ToString() 
     {
-        var properties = GetType().GetProperties(_publicInstanceFlag);
+        // warning IL2075: 'this' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicProperties' 
+        // var properties = GetType().GetProperties(_publicInstanceFlag);
+        var properties = typeof(DebianManifest).GetProperties(_publicInstanceFlag);
         var stringBuilder = new StringBuilder();
         
         foreach (var prop in properties) 

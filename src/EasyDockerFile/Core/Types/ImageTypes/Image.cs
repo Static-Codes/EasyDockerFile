@@ -5,8 +5,11 @@ using System.Xml.Serialization;
 namespace EasyDockerFile.Core.Types.ImageTypes;
 
 [XmlRoot(ElementName = "image")]
-public class Image() 
+public class Image 
 {
+    // Parameterless constructor for XmlSerializer
+    public Image() { }
+
     [XmlElement("full_name")]
     public required string? FullName { get; set; }
 

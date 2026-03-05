@@ -8,10 +8,15 @@
     <Nullable>enable</Nullable>
     <PublishSingleFile>true</PublishSingleFile>		
 		<SelfContained>true</SelfContained>
+    <PublishAOT>true</PublishAOT>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="../EasyDockerFile/EasyDockerFile.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="../EasyDockerFile/Resources/Roots.xml" />
   </ItemGroup>
 
 </Project>
