@@ -1,4 +1,6 @@
-﻿using static EasyDockerFile.Core.Helpers.FamilyLoader;
+﻿
+// // Test to ensure the docker images from Image.xml are properly serialized and the selection menu logic works as intended.
+using static EasyDockerFile.Core.Helpers.FamilyLoader;
 using static EasyDockerFile.Core.Helpers.InputHelper;
 using Spectre.Console;
 using EasyDockerFile.Core.Helpers;
@@ -34,13 +36,14 @@ UserExitStatusCheck(imageChoice);
 var selectedImage = family.Images.GetImage(imageChoice);
 CheckForNullInput(selectedImage);
 
-
-
 Console.WriteLine("{0}: {1}", nameof(familyChoice), familyChoice);
 Console.WriteLine("{0}: {1}", nameof(selectedImage), selectedImage!.FullName);
 Console.WriteLine($"Exiting Option Selected: {familyChoice.IsExitOption()}");
 
 
+// Testing to ensure the debian package manifest functionality works as intended.
+// using EasyDockerFile.Core.API.PackageSearch;
+// using System.Runtime.InteropServices;
 
 // var debianPackageApi = new DebianPackageApi(Architecture.X64);
 // await debianPackageApi.InitializeManifestList();
