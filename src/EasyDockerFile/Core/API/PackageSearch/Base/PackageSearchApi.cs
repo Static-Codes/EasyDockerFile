@@ -1,4 +1,4 @@
-namespace EasyDockerFile.Core.API.PackageSearch;
+namespace EasyDockerFile.Core.API.PackageSearch.Base;
 
 public class PackageSearchApi
 {
