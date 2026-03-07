@@ -1,4 +1,4 @@
-namespace EasyDockerFile.Core.API.PackageSearch;
+namespace EasyDockerFile.Core.API.PackageSearch.States;
 public ref struct ManifestParserState
 {
     public ReadOnlySpan<byte> Key;
