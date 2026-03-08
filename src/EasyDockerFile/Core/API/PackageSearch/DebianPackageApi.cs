@@ -1,4 +1,6 @@
+using EasyDockerFile.Core.API.PackageSearch.Base;
 using EasyDockerFile.Core.API.PackageSearch.Manifests;
+using EasyDockerFile.Core.API.PackageSearch.States;
 using System.Buffers.Text;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
