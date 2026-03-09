@@ -12,6 +12,8 @@ on:
 jobs:
   update-xml:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       IMAGES_XML_PATH: "src/EasyDockerFile/Resources/Images.xml"
       SCRIPT_PATH: "src/EasyDockerFile/Resources/Maintenance/fedora-version-update.py"
