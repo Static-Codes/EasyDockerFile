@@ -1,5 +1,4 @@
-﻿
-// // Test to ensure the docker images from Image.xml are properly serialized and the selection menu logic works as intended.
+﻿# region Test to ensure the docker images from Image.xml are properly serialized and the selection menu logic works as intended.
 // using static EasyDockerFile.Core.Helpers.FamilyLoader;
 // using static EasyDockerFile.Core.Helpers.InputHelper;
 // using Spectre.Console;
@@ -39,9 +38,9 @@
 // Console.WriteLine("{0}: {1}", nameof(familyChoice), familyChoice);
 // Console.WriteLine("{0}: {1}", nameof(selectedImage), selectedImage!.FullName);
 // Console.WriteLine($"Exiting Option Selected: {familyChoice.IsExitOption()}");
+# endregion
 
-
-// // Testing to ensure the Debian package manifest functionality works as intended.
+#region Test to ensure the Debian package manifest functionality works as intended.
 // using EasyDockerFile.Core.API.PackageSearch;
 // using System.Runtime.InteropServices;
 
@@ -51,17 +50,16 @@
 // foreach (var manifest in debianPackageApi.PackageManifests[..10]) {
 //     Console.WriteLine(manifest);
 // }
+#endregion
 
-
-
-// // ZChunk binary loading test
+#region ZChunk binary loading test
 // using EasyDockerFile.Core.Helpers;
 
 // var location = ZChunkLoader.Load();
 // Console.WriteLine(location);
+#endregion
 
-
-// Testing to ensure the Fedora package manifest functionality works as intended.
+#region Testing to ensure the Fedora package manifest functionality works as intended.
 // using EasyDockerFile.Core.API.PackageSearch;
 // using static System.Runtime.InteropServices.Architecture;
 
@@ -72,3 +70,4 @@
 // foreach (var manifest in fedoraPackageApi.PackageManifests[..10]) {
 //     Console.WriteLine(manifest);
 // }
+#endregion
