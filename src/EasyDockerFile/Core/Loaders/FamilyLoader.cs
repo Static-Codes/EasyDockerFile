@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using static EasyDockerFile.Core.Common.Constants;
 
-namespace EasyDockerFile.Core.Helpers;
+namespace EasyDockerFile.Core.Loaders;
 
 public static class FamilyLoader 
 {

@@ -2,9 +2,8 @@ using static EasyDockerFile.Core.Common.Platform;
 using static EasyDockerFile.Core.Common.Constants;
 using static EasyDockerFile.Core.Common.SessionInfo;
 using static System.Runtime.InteropServices.Architecture;
-using System;
 
-namespace EasyDockerFile.Core.Helpers;
+namespace EasyDockerFile.Core.Loaders;
 
 public class ZChunkLoader() 
 {
