@@ -1,12 +1,11 @@
 namespace EasyDockerFile.Core.API.ToolchainSearch.Git;
 
-
+using EasyDockerFile.Core.Extensions;
 using EasyDockerFile.Core.Types.GitTypes;
 using Octokit;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using static EasyDockerFile.Core.Common.Constants;
 
 public class RepoClient
 {
@@ -19,10 +18,19 @@ public class RepoClient
         _repoInfo = repoInfoObj;
 
         _client = new GitHubClient(new ProductHeaderValue(_repoInfo.RepoUrlObj.RepoName));
+
+        if (_repoInfo.RequiresAuth) {
+            _client.Credentials = _repoInfo.Authentication;
+
+            // This needs improvement, async calls should not called on a blocking thread
+            _repoInfo.UserInfo = _client.User.Current().GetAwaiter().GetResult();
+        }
         apiInfo = _client.GetLastApiInfo();
     }
 
-    
+    private bool BranchesFound() {
+        return _repoInfo.BranchNames.Any();
+    }
 
     public (bool IsRateLimited, Tuple<int, int, DateTimeOffset>? RateLimitInfo) GetRateLimitInfo()
     {
@@ -40,10 +48,6 @@ public class RepoClient
         );
 
         return (true, rateLimitInfo);
-    }
-
-    private bool BranchesFound() {
-        return _repoInfo.BranchNames.Any();
     }
 
     public async Task UpdateBranchesAsync()
@@ -97,8 +101,13 @@ public class RepoClient
             - Is Set: {_repoInfo.Authentication != null}
             - OAuth Token: {_repoInfo.Authentication.GetToken()}
         -----------------------------------
+        - User Info:
+            - Is Authenticated: {_repoInfo.UserInfo != null}
+            - Username: {_repoInfo.UserInfo?.Login ?? "Not Set"}
+            - Public Repos: {_repoInfo.UserInfo?.PublicRepos.ToString() ?? "Not Set"}
+        -----------------------------------
         - Branches:
-        {"    "}{"- "}{string.Join($"{NLC}    - ", _repoInfo.BranchNames)}
+            {_repoInfo.BranchNames.AsPrettyPrintedBranchString()}
         -----------------------------------
         - Is Private: {_repoInfo.IsPrivate}
         -----------------------------------

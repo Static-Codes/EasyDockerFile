@@ -16,8 +16,9 @@ public class RepoInfo(string repoURL, string[] args)
     public RepoUrl RepoUrlObj = RepoUrl.Build(repoURL);
     public RepoStatus Status = args.Contains("--private") ? RepoStatus.Private : RepoStatus.NotSet;
     public Credentials? Authentication = GetTokenFromArgs(args) is string token 
-        ? new Credentials(token) 
+        ? new Credentials(token, AuthenticationType.Oauth) 
         : null;
+    public User? UserInfo = null;
     public IEnumerable<string> BranchNames { get; set; } = [];
     public bool IsPrivate => Status == RepoStatus.Private;
     public bool IsValid => Status != RepoStatus.NotFound && Status != RepoStatus.NotSet;

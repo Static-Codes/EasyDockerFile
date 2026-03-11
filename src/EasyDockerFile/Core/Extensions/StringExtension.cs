@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using static EasyDockerFile.Core.Common.Constants;
 
 namespace EasyDockerFile.Core.Extensions;
 
@@ -10,4 +11,12 @@ public static class StringExtension
         "armhf" or "armel" => Architecture.Arm,
         _ => throw new InvalidOperationException($"Unable to parse '{archString}' to System.Runtime.InteropServices.Architecture")
     };
+
+    public static string AsPrettyPrintedBranchString(this IEnumerable<string> branchNames) {
+        if (!branchNames.Any()) {
+            return $"- Unable to resolve, please check your OAuth Token above.";
+        }
+
+        return $"- {string.Join($"{NLC}    - ", branchNames)}";
+    }
 }
