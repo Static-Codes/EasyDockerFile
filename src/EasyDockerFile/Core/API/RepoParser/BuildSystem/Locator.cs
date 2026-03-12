@@ -1,4 +1,4 @@
-using EasyDockerFile.Core.Types.ToolchainTypes;
+using EasyDockerFile.Core.Types.BuildTypes.Base;
 
 namespace EasyDockerFile.Core.API.RepoParser.BuildSystem;
 

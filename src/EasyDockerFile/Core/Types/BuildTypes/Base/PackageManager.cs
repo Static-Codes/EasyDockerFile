@@ -1,4 +1,4 @@
-namespace EasyDockerFile.Core.Types.ToolchainTypes;
+namespace EasyDockerFile.Core.Types.BuildTypes.Base;
 
 
 public enum PackageManagerName 
