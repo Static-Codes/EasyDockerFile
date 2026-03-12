@@ -1,7 +1,6 @@
-namespace EasyDockerFile.Core.API.ToolchainSearch.Git;
+namespace EasyDockerFile.Core.Types.GitTypes;
 
 using EasyDockerFile.Core.Extensions;
-using EasyDockerFile.Core.Types.GitTypes;
 using Octokit;
 using Spectre.Console;
 using System;
