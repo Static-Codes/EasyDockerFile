@@ -20,19 +20,40 @@ public class RepoClient
         _repoInfo = repoInfo;
     }
 
-    private static RepoClient RunCreationHelper(GitHubClient client, RepoInfo repoInfo)
+    public async Task<List<string>> GetFlattenedFileList(string owner, string repoName)
     {
-        var repoClient = new RepoClient(client, repoInfo);
-        
-        // Attempting to capture the last api request info, or silently exiting as a null value will be handled externally.
-        try {
-            repoClient._apiInfo = client.GetLastApiInfo();
-        } 
-        catch {
-            
-        }
-        return repoClient;
+        var files = new List<string>();
+        await GetFilesRecursivelyAsync(owner, repoName, files);
+        return files;
     }
+
+    private async Task GetFilesRecursivelyAsync(string owner, string repoName, List<string> files, string path = ".")
+    {   
+        try 
+        {
+            var contents = await _client.Repository.Content.GetAllContents(owner, repoName, path);
+            
+            foreach (var content in contents)
+            {
+                if (content.Type == ContentType.File) {
+                    files.Add(content.Path);
+                }
+
+                else if (content.Type == ContentType.Dir) {
+                    await GetFilesRecursivelyAsync(owner, repoName, files, content.Path);
+                }
+            }
+        }
+        
+        catch (Exception ex) {
+            var eMessage = Markup.Escape($"[ERROR]: {ex.Message}.");
+            AnsiConsole.MarkupLine($"[red]{eMessage}[/]");
+            Console.WriteLine("[INFO]: Use the --help flag for more information.");
+            Environment.Exit(1);
+        }
+    }
+
+    
     public static async Task<RepoClient> CreateAsync(RepoInfo repoInfo)
     {
         var gitClient = new GitHubClient(new ProductHeaderValue(repoInfo.RepoUrlObj.RepoName));
@@ -115,6 +136,20 @@ public class RepoClient
         _repoInfo.BranchNames = branchesObj.Select(branch => branch.Name) ?? [];
     }
     
+    private static RepoClient RunCreationHelper(GitHubClient client, RepoInfo repoInfo)
+    {
+        var repoClient = new RepoClient(client, repoInfo);
+        
+        // Attempting to capture the last api request info, or silently exiting as a null value will be handled externally.
+        try {
+            repoClient._apiInfo = client.GetLastApiInfo();
+        } 
+        catch {
+            
+        }
+        return repoClient;
+    }
+
     public void UpdateStatus() {
 
         if (_repoInfo == null) {

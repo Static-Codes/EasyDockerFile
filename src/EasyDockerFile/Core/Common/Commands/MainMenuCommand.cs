@@ -59,7 +59,6 @@ public class MainMenuCommand : AsyncCommand<MainMenuSettings>
 
         await client.UpdateBranchesAsync();
         client.UpdateStatus();
-        
         Console.WriteLine(client);
         return 0;
             
