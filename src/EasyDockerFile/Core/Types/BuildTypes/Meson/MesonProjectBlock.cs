@@ -5,7 +5,8 @@ namespace EasyDockerFile.Core.Types.BuildTypes.Meson;
 public class MesonProjectBlock
 {
     public string? ProjectName;
-    public string? ProjectLanguage;
+    public string[]? ProjectLanguages;
+    public string[]? ProjectLicenses;
     public string? ProjectVersion;
     public string? MesonVersion;
     public string[]? DefaultOptions;

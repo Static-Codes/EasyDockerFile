@@ -1,3 +1,5 @@
+using EasyDockerFile.Core.Common;
+using EasyDockerFile.Core.Extensions;
 using EasyDockerFile.Core.Types.BuildTypes.Meson;
 using System.Text.RegularExpressions;
 using static EasyDockerFile.Core.Types.BuildTypes.Meson.MesonRegex;
@@ -6,6 +8,23 @@ namespace EasyDockerFile.Core.API.RepoParser.BuildSystem;
 
 public partial class MesonBuildParser 
 {
+    private static string[] ExtractArgumentValues(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) {
+            return [];
+        }
+
+        // Removes the surrounding brackets "[...]"
+        string content = input.Trim().TrimStart('[').TrimEnd(']');
+
+        // Seperates each argument found into a unique and sanitized element.
+        var matches = GetArrayValueRegex.Matches(content);
+
+        // Returns an array of flags (group=value)
+        return [.. matches.Cast<Match>().Select(m => m.Groups["val"].Value)];
+    }
+    
+
     private static string? GetMesonProjectContents(string mesonBuildFile) 
     {
         string? fileContents = null;
@@ -21,48 +40,47 @@ public partial class MesonBuildParser
             Environment.Exit(1);
         }
 
-        return fileContents;
+        return fileContents
+               .Replace("\u00A0", " ")  // Replaces Non-breaking space
+               .Replace("\uFEFF", "") // Removes Byte Order Mark;
+               .Replace("\r\n", "\n"); // Sanitizing windows line endings
     }
 
-    public static MesonProjectBlock GetMesonProjectBlock(string mesonBuildFileContents) 
+    private static MesonProjectBlock GetMesonProjectBlock(string mesonBuildFileContents) 
     {
-        var match = GetProjectBlock.Match(mesonBuildFileContents);
+        var match = MesonProjectObjectRegex.Match(mesonBuildFileContents);
         
         if (!match.Success) {
-            Console.WriteLine($"[WARNING]: Unable to parse the project object from the contents of the provided meson.build file");
-            Console.WriteLine($"[ERROR]: match.Success is false in GetMesonProjectObject");
+            Console.WriteLine($"[WARNING]: Unable to parse the project object from the meson.build file");
             Environment.Exit(1);
         }
-        
-        string innerContent = match.Groups["content"].Value;
-        
-        var positionalMatch = GetProjectNameAndLanguage.Match(innerContent);
 
-        var block = new MesonProjectBlock() {
-            ProjectName = positionalMatch.Groups["name"].Value,
-            ProjectLanguage = positionalMatch.Groups["lang"].Value,
-            
-            // Retrieves all other string arguments where ordering may differ.
-            ProjectVersion = ExtractArgumentValue(innerContent, "version"),
-            MesonVersion = ExtractArgumentValue(innerContent, "meson_version")
+        var block = new MesonProjectBlock
+        {
+            ProjectName = match.Groups["name"].Value,
+            ProjectVersion = match.Groups["project_version"].Value,
+            MesonVersion = match.Groups["meson_version"].Value,
+            ProjectLanguages = HandleValueOrArray(match, "lang_single", "lang_array", "project language(s)"),
+            ProjectLicenses = HandleValueOrArray(match, "license_single", "license_array", "project license(s)")
         };
 
-        var options = ExtractArgumentValue(innerContent, "default_options");
+        if (block.ProjectLanguages.Length == 1 && block.ProjectLanguages[0].Equals("Not Found")) {
+            throw new ArgumentException("Languages were not found in the meson project block.");
+        }
 
-        // Serializes the meson array default_options = ['arg1', 'arg2' ...] to a c# string array
-        block.DefaultOptions = ExtractArgumentValues(options);
+        block.DefaultOptions = ExtractArgumentValues(match.Groups["build_arguments"].Value);
 
         return block;
     }
 
-    public static List<MesonDependency> GetMesonProjectDependencies(string mesonFileContent) 
+    private static List<MesonDependency> GetMesonProjectDependencies(string mesonFileContent) 
     {
         var matches = MesonDependencyRegex.Matches(mesonFileContent);
         
         if (matches.Count == 0) {
-            Console.WriteLine($"[WARNING]: Unable to parse the project dependencies from the contents of the provided meson.build file");
-            Console.WriteLine($"[ERROR]: matches.Count == 0 is false in GetMesonProjectObject");
-            Environment.Exit(1);
+            Console.WriteLine($"[WARNING]: Unable to parse any project dependencies from the provided meson.build file");
+            Console.WriteLine($"[ERROR]: matches.Count is 0 in GetMesonProjectObject");
+            return [];
         }
 
         var dependencies = new List<MesonDependency>();
@@ -72,7 +90,7 @@ public partial class MesonBuildParser
             if (match.Success)
             {
 
-                string varName = match.Groups["var"].Value;       // e.g., "zstd_dep"
+                string varName = match.Groups["var"].Value;
                 string libName = match.Groups["lib"].Value;
                 string systemName = match.Groups["system"].Value;
                 string[] fallbackNames = [];
@@ -98,30 +116,21 @@ public partial class MesonBuildParser
         return dependencies;
     }
 
-    private static string ExtractArgumentValue(string input, string key)
+    private static string[] HandleValueOrArray(Match match, string singleKey, string arrayKey, string name) 
     {
-        // Matches both:
-        // key : 'value'
-        // key : [value]
-        var pattern = $@"{key}\s*:\s*(?<val>'.*?'|\[.*?\])";
-        var match = Regex.Match(input, pattern, RegexOptions.Singleline);
-        return match?.Groups?["val"].Value?.Trim('\'') ?? ""; // Trims surrounding single quotes.
-    }
+        var single = match.Groups[singleKey];
+        var array = match.Groups[arrayKey];
 
-    private static string[] ExtractArgumentValues(string input)
-    {
-        if (string.IsNullOrWhiteSpace(input)) {
-            return [];
+        if (single.Success) {
+            return [ single.Value.Trim('\'', '\"', ' ') ];
+        }
+        
+        if (array.Success) {
+            return ExtractArgumentValues(array.Value);
         }
 
-        // Removes the surrounding brackets "[...]"
-        string content = input.Trim().TrimStart('[').TrimEnd(']');
-
-        // Seperates each argument found into a unique and sanitized element.
-        var matches = GetArrayValueRegex.Matches(content);
-
-        // Returns an array of flags (group=value)
-        return [.. matches.Cast<Match>().Select(m => m.Groups["val"].Value)];
+        Console.WriteLine($"[WARNING]: Unable to locate {name} in meson.build");
+        return ["Not Found"];
     }
 
     public static void ParseBuildFile(string mesonBuildFile) 
@@ -137,6 +146,33 @@ public partial class MesonBuildParser
 
         var projectBlock = GetMesonProjectBlock(fileContents);
         Console.WriteLine(projectBlock);
-        var dependencies = GetMesonProjectDependencies(fileContents);
+        var projectDependencies = GetMesonProjectDependencies(fileContents);
+
+        List<MesonDependency> windowsDependencies = [];
+        List<MesonDependency> unixDependencies = [];
+
+        foreach (var dependency in projectDependencies) 
+        {
+            if (dependency.SystemName == null || dependency.SystemName.IsUnix()) {
+                unixDependencies.Add(dependency);
+                continue;
+            }
+            if (dependency.SystemName == "windows") {
+                windowsDependencies.Add(dependency);
+                continue;
+            }
+            unixDependencies.Add(dependency);
+        }
+
+        var dependencies = Platform.IsWindows switch {
+            true => windowsDependencies,
+            false => unixDependencies,
+        };
+
+        Console.WriteLine($"{dependencies.Count} dependencies located.");
+        foreach (var dependency in dependencies) {
+            Console.WriteLine($"\t- {dependency.LibraryName}");
+        }
+
     }
 }

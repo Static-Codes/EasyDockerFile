@@ -14,14 +14,28 @@ public static partial class MesonRegex
     public static partial Regex GetProjectNameAndLanguage { get; }
 
     [GeneratedRegex(
-        pattern:
-        @"project\(\s*'(?<project_name>.*)', " +
-        @"'(?<project_language>.*)',\s*" +
-        @"version : '(?<project_version>.*)',\s*" +
-        @"meson_version : '(?<meson_version>.*)',\s*" +
-        @"default_options : (?<build_arguments>\['.*'])", 
-        options: RegexOptions.IgnoreCase,
-        cultureName: "en-US"
+        pattern: 
+            // Project Name (String)
+            @"project\s*\(\s*'(?<name>[^']+)'\s*,\s*" +
+
+            // Language Name (String or Array)
+            @"(?:'(?<lang_single>[^']+)'|\s*(?<lang_array>\[[^\]]*?\]))\s*" +
+
+            // Project Version (String)
+            @"(?:(?=[\s\S]*?\bversion\s*:\s*'(?<project_version>[^']+)')?)" +
+
+            // Project License (String or Array)
+            @"(?:(?=[\s\S]*?\blicense\s*:\s*(?:'(?<license_single>[^']+)'|\s*(?<license_array>\[[^\]]*?\])))?)" +
+
+            // Meson Version (String)
+            @"(?:(?=[\s\S]*?\bmeson_version\s*:\s*'(?<meson_version>[^']+)')?)" +
+
+            // Default Options (String or Array)
+            @"(?:(?=[\s\S]*?\bdefault_options\s*:\s*(?<build_arguments>\[[^\]]*?\]))?)" +
+
+            // End of project block
+            @"[\s\S]*?\)",
+        options: RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace
     )]
     public static partial Regex MesonProjectObjectRegex { get; }
 

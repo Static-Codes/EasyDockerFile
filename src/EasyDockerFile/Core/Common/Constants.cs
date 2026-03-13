@@ -12,4 +12,5 @@ public class Constants
     public readonly static string TEMP_DIR = Path.GetTempPath();
     public readonly static string NLC = Environment.NewLine;
     public const string BaseZChunkPattern = "EasyDockerFile.Resources.Utilities.unzck";
+    public readonly static string[] MesonUnixSystemNames = ["darwin", "dragonfly", "freebsd", "linux", "netbsd", "openbsd"];
 }
