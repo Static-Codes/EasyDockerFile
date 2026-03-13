@@ -1,6 +1,6 @@
 namespace EasyDockerFile.Core.API.PackageSearch.Base;
 
-public class PackageSearchApi
+public class IPackageSearchApi
 {
     // The platform identifier defined for the provided architecture.
     public virtual string? PlatformIdentifer { get;}

@@ -14,7 +14,7 @@ namespace EasyDockerFile.Core.API.PackageSearch;
 // Implementation of PackageSearchApi for Debian platforms.
 // <param name="architecture"> The desired architecture for the returned packages </param>
 // </summary>
-public class DebianPackageApi(Architecture architecture) : PackageSearchApi 
+public class DebianPackageApi(Architecture architecture) : IPackageSearchApi 
 {
     public override string? PlatformIdentifer => GetPlatformIdentifer(architecture);
     public override string? PackageFileUri => GetUri(architecture);

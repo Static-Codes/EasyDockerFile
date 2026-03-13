@@ -17,7 +17,7 @@ namespace EasyDockerFile.Core.API.PackageSearch;
 // Implementation of PackageSearchApi for Fedora-based distros.
 // <param name="architecture"> The desired architecture for the returned packages </param>
 // </summary>
-public class FedoraPackageApi : PackageSearchApi 
+public class FedoraPackageApi : IPackageSearchApi 
 {
     private readonly Task<string?> _getUriTask;
     public new string? PlatformIdentifer;
