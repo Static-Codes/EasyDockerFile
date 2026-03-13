@@ -126,9 +126,9 @@
 #endregion
 
 #region "Ongoing tests for meson.build parsing.
-using EasyDockerFile.Core.API.RepoParser.BuildSystem.Meson;
+using EasyDockerFile.Core.API.RepoParser.BuildSystem;
 
-MesonProjectFunctions.ParseBuildFile("/home/nerdy/Downloads/meson.build");
+MesonBuildParser.ParseBuildFile("/home/nerdy/Downloads/meson.build");
 
 #endregion
 

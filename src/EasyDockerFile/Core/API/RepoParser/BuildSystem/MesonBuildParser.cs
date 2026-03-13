@@ -55,6 +55,49 @@ public partial class MesonBuildParser
         return block;
     }
 
+    public static List<MesonDependency> GetMesonProjectDependencies(string mesonFileContent) 
+    {
+        var matches = MesonDependencyRegex.Matches(mesonFileContent);
+        
+        if (matches.Count == 0) {
+            Console.WriteLine($"[WARNING]: Unable to parse the project dependencies from the contents of the provided meson.build file");
+            Console.WriteLine($"[ERROR]: matches.Count == 0 is false in GetMesonProjectObject");
+            Environment.Exit(1);
+        }
+
+        var dependencies = new List<MesonDependency>();
+
+        foreach (Match match in matches) 
+        {
+            if (match.Success)
+            {
+
+                string varName = match.Groups["var"].Value;       // e.g., "zstd_dep"
+                string libName = match.Groups["lib"].Value;
+                string systemName = match.Groups["system"].Value;
+                string[] fallbackNames = [];
+
+                var fallbackMatch = MesonFallbackRegex.Match(match.Groups["args"].Value);
+                if (fallbackMatch.Success) { 
+                    fallbackNames = ExtractArgumentValues(fallbackMatch.Groups["fallbacks"].Value);
+                }
+
+                dependencies.Add(
+                    new MesonDependency() {
+                        VariableName = varName,
+                        LibraryName = libName,  
+                        SystemName = systemName,
+                        FallbackLibraries = fallbackNames
+                    }
+                );
+            }
+
+        
+        }
+
+        return dependencies;
+    }
+
     private static string ExtractArgumentValue(string input, string key)
     {
         // Matches both:
@@ -94,5 +137,6 @@ public partial class MesonBuildParser
 
         var projectBlock = GetMesonProjectBlock(fileContents);
         Console.WriteLine(projectBlock);
+        var dependencies = GetMesonProjectDependencies(fileContents);
     }
 }
