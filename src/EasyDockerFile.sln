@@ -9,6 +9,9 @@ EndProject
 Project("{BC18A751-8A7E-4E4F-8BDE-02EDCD82A66A}") = "EasyDockerFile.Sandbox", "EasyDockerFile.Sandbox\EasyDockerFile.Sandbox.csproj", "{A022D243-6BD3-44AF-A1AC-54D55B2D4F65}"
 EndProject
 
+Project("{0D31F702-682C-4929-B67E-B41DB4E4391F}") = "DockerFileSharp", "DockerFileSharp\DockerFileSharp.csproj", "{A650CD14-76D2-4610-B442-F2B45DF287FB}"
+EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +37,16 @@ Global
 		{BC18A751-8A7E-4E4F-8BDE-02EDCD82A66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC18A751-8A7E-4E4F-8BDE-02EDCD82A66A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC18A751-8A7E-4E4F-8BDE-02EDCD82A66A}.Release|Any CPU.Build.0 = Release|Any CPU
+
+		{0D31F702-682C-4929-B67E-B41DB4E4391F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D31F702-682C-4929-B67E-B41DB4E4391F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D31F702-682C-4929-B67E-B41DB4E4391F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D31F702-682C-4929-B67E-B41DB4E4391F}.Release|Any CPU.Build.0 = Release|Any CPU
+		
+		{A650CD14-76D2-4610-B442-F2B45DF287FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A650CD14-76D2-4610-B442-F2B45DF287FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A650CD14-76D2-4610-B442-F2B45DF287FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A650CD14-76D2-4610-B442-F2B45DF287FB}.Release|Any CPU.Build.0 = Release|Any CPU
 
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
