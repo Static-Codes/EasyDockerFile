@@ -1,4 +1,4 @@
-namespace EasyDockerFile.Core.Types.GitTypes;
+namespace EasyDockerFile.Core.Types.Git;
 
 public class RepoUrl 
 {

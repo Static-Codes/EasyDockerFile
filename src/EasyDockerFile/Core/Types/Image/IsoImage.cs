@@ -2,13 +2,13 @@ using EasyDockerFile.Core.Extensions;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
-namespace EasyDockerFile.Core.Types.ImageTypes;
+namespace EasyDockerFile.Core.Types.Image;
 
 [XmlRoot(ElementName = "image")]
-public class Image 
+public class IsoImage 
 {
     // Parameterless constructor for XmlSerializer
-    public Image() { }
+    public IsoImage() { }
     
     [XmlElement("full_name")]
     public required string FullName { get; set; }

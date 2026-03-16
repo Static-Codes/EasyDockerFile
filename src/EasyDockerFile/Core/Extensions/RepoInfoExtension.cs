@@ -1,4 +1,4 @@
-using EasyDockerFile.Core.Types.GitTypes;
+using EasyDockerFile.Core.Types.Git;
 using Octokit;
 
 namespace EasyDockerFile.Core.Extensions;

@@ -1,4 +1,5 @@
-using EasyDockerFile.Core.Types.ImageTypes;
+using EasyDockerFile.Core.API.PackageSearch.Mappers;
+using EasyDockerFile.Core.Types.Image;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using static EasyDockerFile.Core.Common.Constants;

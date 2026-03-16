@@ -1,4 +1,4 @@
-using EasyDockerFile.Core.Types.BuildTypes.Base;
+using EasyDockerFile.Core.Types.Build.Base;
 
 namespace EasyDockerFile.Core.Extensions;
 

@@ -4,7 +4,7 @@
 // using Spectre.Console;
 // using EasyDockerFile.Core.Helpers;
 // using EasyDockerFile.Core.Extensions;
-// using EasyDockerFile.Core.Types.DockerTypes;
+// using DockerFileSharp.Common;
 
 
 // // Retrieving families
@@ -79,7 +79,7 @@
 #region Testing RepoInfo
 
 // using EasyDockerFile.Core.API.ToolchainSearch.Git;
-// using EasyDockerFile.Core.Types.GitTypes;
+// using EasyDockerFile.Core.Types.Git;
 
 // // public repo test
 // // var repoInfoObj = new RepoInfo("https://github.com/Static-Codes/BrowserAutomationMaster");
@@ -126,9 +126,9 @@
 #endregion
 
 #region "Ongoing tests for meson.build parsing.
-using EasyDockerFile.Core.API.RepoParser.BuildSystem;
+// using EasyDockerFile.Core.API.RepoParser.BuildSystem;
 
-MesonBuildParser.ParseBuildFile("/home/nerdy/Downloads/meson.build");
+// MesonBuildParser.ParseBuildFile("/home/nerdy/Downloads/meson.build");
 
 #endregion
 

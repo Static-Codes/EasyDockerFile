@@ -1,5 +1,6 @@
 using EasyDockerFile.Core.API.PackageSearch.Base;
 using EasyDockerFile.Core.API.PackageSearch.Manifests;
+using EasyDockerFile.Core.API.PackageSearch.Mappers;
 using EasyDockerFile.Core.Loaders;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;

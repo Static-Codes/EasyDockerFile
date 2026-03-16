@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace EasyDockerFile.Core.Types.ImageTypes;
+namespace EasyDockerFile.Core.Types.Image;
 
 [XmlRoot("family")]
 public class ImageFamily
@@ -12,5 +12,5 @@ public class ImageFamily
     public string Name { get; set; } = string.Empty;
 
     [XmlElement("image")]
-    public Image[] Images { get; set; } = [];
+    public IsoImage[] Images { get; set; } = [];
 }

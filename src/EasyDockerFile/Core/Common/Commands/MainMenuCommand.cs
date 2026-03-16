@@ -1,4 +1,4 @@
-using EasyDockerFile.Core.Types.GitTypes;
+using EasyDockerFile.Core.Types.Git;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Diagnostics.CodeAnalysis;

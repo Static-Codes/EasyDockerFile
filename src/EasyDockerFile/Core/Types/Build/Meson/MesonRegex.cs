@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace EasyDockerFile.Core.Types.BuildTypes.Meson;
+namespace EasyDockerFile.Core.Types.Build.Meson;
 
 public static partial class MesonRegex
 {

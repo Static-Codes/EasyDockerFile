@@ -1,4 +1,4 @@
-namespace EasyDockerFile.Core.Types.BuildTypes.Meson;
+namespace EasyDockerFile.Core.Types.Build.Meson;
 
 public class MesonDependency 
 {

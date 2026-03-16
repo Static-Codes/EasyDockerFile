@@ -1,4 +1,4 @@
-using EasyDockerFile.Core.Types.ImageTypes;
+using EasyDockerFile.Core.Types.Image;
 
 namespace EasyDockerFile.Core.Extensions;
 
@@ -22,7 +22,7 @@ public static class ImageExtension
             .FirstOrDefault();
     }
 
-    public static Image? GetImage(this Image[] images, string imageName) {
+    public static IsoImage? GetImage(this IsoImage[] images, string imageName) {
         return 
             images
             .Where(image => image.FullName == imageName)

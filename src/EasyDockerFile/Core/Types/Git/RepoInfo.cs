@@ -2,7 +2,7 @@ using EasyDockerFile.Core.Common.Commands;
 using EasyDockerFile.Core.Extensions;
 using Octokit;
 
-namespace EasyDockerFile.Core.Types.GitTypes;
+namespace EasyDockerFile.Core.Types.Git;
 
 public enum RepoStatus 
 {

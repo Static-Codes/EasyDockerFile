@@ -1,4 +1,4 @@
-namespace EasyDockerFile.Core.Types.BuildTypes.Base;
+namespace EasyDockerFile.Core.Types.Build.Base;
 public enum BuildSystemName
 {
     Autotools = 0,

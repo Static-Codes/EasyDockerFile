@@ -27,7 +27,7 @@ public static class StringExtension
 
         return $"- {string.Join($"{NLC}    - ", filePaths)}";
     }
-
+    
     public static bool IsUnix(this string SystemName) {
         return MesonUnixSystemNames.Contains(SystemName);
     }

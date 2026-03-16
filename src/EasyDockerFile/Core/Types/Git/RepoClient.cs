@@ -1,4 +1,4 @@
-namespace EasyDockerFile.Core.Types.GitTypes;
+namespace EasyDockerFile.Core.Types.Git;
 
 using EasyDockerFile.Core.Extensions;
 using EasyDockerFile.Core.Helpers;
