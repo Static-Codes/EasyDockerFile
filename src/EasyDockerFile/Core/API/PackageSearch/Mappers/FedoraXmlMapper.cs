@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 using EasyDockerFile.Core.API.PackageSearch.Manifests;
-using EasyDockerFile.Core.Types.Image;
+using DockerFileSharp.Common.Image;
 
 namespace EasyDockerFile.Core.API.PackageSearch.Mappers;
 

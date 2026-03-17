@@ -1,5 +1,5 @@
 using DockerFileSharp.Common;
-using EasyDockerFile.Core.Types.Image;
+using DockerFileSharp.Common.Image;
 
 namespace DockerFileSharp.Instructions;
 

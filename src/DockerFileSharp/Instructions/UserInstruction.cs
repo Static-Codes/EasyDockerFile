@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using DockerFileSharp.Common;
 
 namespace DockerFileSharp.Instructions;

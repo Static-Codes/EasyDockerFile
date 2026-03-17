@@ -35,6 +35,10 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="../DockerFileSharp/DockerFileSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources/Images.xml"/>
     <EmbeddedResource Include="Resources/Utilities/**"/> 
   </ItemGroup>

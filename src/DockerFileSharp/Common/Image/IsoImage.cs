@@ -1,8 +1,7 @@
-using EasyDockerFile.Core.Extensions;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
-namespace EasyDockerFile.Core.Types.Image;
+namespace DockerFileSharp.Common.Image;
 
 [XmlRoot(ElementName = "image")]
 public class IsoImage 
@@ -23,4 +22,3 @@ public class IsoImage
     [XmlIgnore]
     public IEnumerable<Architecture> SupportedArchitectures => ArchitectureStrings.Select(archString => archString.ToArchitecture());
 }
-

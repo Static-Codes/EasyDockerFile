@@ -1,6 +1,5 @@
 using System.Text;
 using DockerFileSharp.Common;
-using static DockerFileSharp.Common.Entensions;
 
 namespace DockerFileSharp.Instructions;
 

@@ -3,8 +3,8 @@
         <type fullname="EasyDockerFile.Core.API.PackageSearch.Manifests.FedoraManifest" preserve="all"/>
         <type fullname="EasyDockerFile.Core.Common.Commands.MainMenuCommand" preserve="all" />
         <type fullname="EasyDockerFile.Core.Common.Commands.MainMenuSettings" preserve="all" />
-        <type fullname="EasyDockerFile.Core.Types.Image.Image" preserve="all" />
-        <type fullname="EasyDockerFile.Core.Types.Image.ImageFamilies" preserve="all" />
-        <type fullname="EasyDockerFile.Core.Types.Image.ImageFamily" preserve="all" />
+        <type fullname="DockerFileSharp.Common.Image.ImageFamilies" preserve="all" />
+        <type fullname="DockerFileSharp.Common.Image.ImageFamily" preserve="all" />
+        <type fullname="DockerFileSharp.Common.Image.IsoImage" preserve="all" />
     </assembly>
 </linker>

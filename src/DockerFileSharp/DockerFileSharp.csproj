@@ -10,6 +10,9 @@
     <InvariantGlobalization>false</InvariantGlobalization>
     <UseNativeXmlSerialization>true</UseNativeXmlSerialization>
     <!-- <PublishSingleFile>true</PublishSingleFile>		 -->
+
+    <!-- Will ignore publish commands, since this will be a dependency for EasyDockerFile -->
+    <IsPublishable>false</IsPublishable> 
 	  <SelfContained>true</SelfContained>
     <TrimMode>full</TrimMode>
     <StackTraceSupport>false</StackTraceSupport>
@@ -31,11 +34,6 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="../EasyDockerFile/EasyDockerFile.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TrimmerRootDescriptor Include="../EasyDockerFile/Resources/Trimmer/Roots.xml" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace EasyDockerFile.Core.Types.Image;
+namespace DockerFileSharp.Common.Image;
 
 [XmlRoot("families")]
 public class ImageFamilies 
@@ -11,4 +11,3 @@ public class ImageFamilies
     [XmlElement("family")]
     public ImageFamily[] SupportedFamilies { get; set; } = [];
 }
-

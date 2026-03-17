@@ -1,4 +1,4 @@
-using EasyDockerFile.Core.Types.Image;
+using DockerFileSharp.Common.Image;
 
 namespace DockerFileSharp.Common;
 
