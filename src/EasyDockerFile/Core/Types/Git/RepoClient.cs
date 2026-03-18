@@ -26,7 +26,7 @@ public class RepoClient
         RepoClient? client;
 
         if (!repoInfo.RequiresAuth) {
-            return RunCreationHelper(gitClient, repoInfo);
+            return CreateRepoClient(gitClient, repoInfo);
         }
         
         // At this point RequiresAuth is guaranteed to be true.
@@ -34,7 +34,7 @@ public class RepoClient
         {
             gitClient.Credentials = repoInfo.Authentication;
             repoInfo.UserInfo = await gitClient.User.Current();
-            client = RunCreationHelper(gitClient, repoInfo);
+            client = CreateRepoClient(gitClient, repoInfo);
         }
 
         else {
@@ -110,7 +110,7 @@ public class RepoClient
         return (true, rateLimitInfo);
     }
   
-    private static RepoClient RunCreationHelper(GitHubClient client, RepoInfo repoInfo)
+    private static RepoClient CreateRepoClient(GitHubClient client, RepoInfo repoInfo)
     {
         var repoClient = new RepoClient(client, repoInfo);
         
