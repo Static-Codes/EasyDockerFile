@@ -1,5 +1,6 @@
-using System.Xml.Linq;
 using System.Text;
+using System.Xml.Linq;
+using static EasyDockerFile.Core.Common.Constants;
 
 namespace EasyDockerFile.Core.API.PackageSearch.Manifests;
 
@@ -60,14 +61,59 @@ public class FedoraPackage
     public FedoraPackageLocation? Location; 
     public FedoraPackageFormat? Format; 
 
-    // Keep your ToString() logic here if needed
+    public override string ToString()
+    {
+        var fields = GetType().GetFields(_publicInstanceFlag);
+        var stringBuilder = new StringBuilder();
+        foreach (var field in fields) 
+        {
+            if (field.FieldType == typeof(string)) {
+                stringBuilder.AppendLine($"{field.Name}: {field.GetValue(this)}");
+            }
+
+            if (field.FieldType == typeof(string[])) {
+                stringBuilder.AppendLine($"{field.Name}");
+                var arrayMembersObj = field.GetValue(this);
+
+                ArgumentNullException.ThrowIfNull(arrayMembersObj, nameof(arrayMembersObj));
+
+                var arrayMembers = (string[])arrayMembersObj;
+
+                foreach (string member in arrayMembers) {
+                    stringBuilder.AppendLine($"\t- {member}");
+                }
+            }
+        }
+        return stringBuilder.ToString();
+    }
 }
 
-public class FedoraPackageVersion { public int Epoch; public string? Ver; public string? Rel; }
-public class FedoraPackageChecksum { public string? Type; public string? Pkgid; public string? Text; }
-public class FedoraPackageTime { public long File; public long Build; }
-public class FedoraPackageSize { public long Package; public long Installed; public long Archive; }
-public class FedoraPackageLocation { public string? Href; }
+public class FedoraPackageVersion { 
+    public int Epoch; 
+    public string? Ver; 
+    public string? Rel; 
+}
+
+public class FedoraPackageChecksum { 
+    public string? Type; 
+    public string? Pkgid; 
+    public string? Text; 
+}
+
+public class FedoraPackageTime { 
+    public long File; 
+    public long Build; 
+}
+public class FedoraPackageSize 
+{ 
+    public long Package; 
+    public long Installed; 
+    public long Archive; 
+}
+
+public class FedoraPackageLocation { 
+    public string? Href; 
+}
 
 public class FedoraPackageFormat 
 { 
@@ -82,7 +128,27 @@ public class FedoraPackageFormat
     public List<string>? File;
 }
 
-public class FedoraPackageHeaderRange { public int Start; public int End; }
-public class FedoraPackageProvides { public List<FedoraPackageEntry> Entries = []; }
-public class FedoraPackageRequires { public List<FedoraPackageEntry> Entries = []; }
-public class FedoraPackageEntry { public string? Name; public string? Flags; public int Epoch; public string? Ver; public string? Rel; }
+public class FedoraPackageHeaderRange 
+{ 
+    public int Start; 
+    public int End; 
+}
+
+public class FedoraPackageProvides 
+{ 
+    public List<FedoraPackageEntry> Entries = []; 
+}
+
+public class FedoraPackageRequires 
+{ 
+    public List<FedoraPackageEntry> Entries = []; 
+}
+
+public class FedoraPackageEntry 
+{ 
+    public string? Name; 
+    public string? Flags; 
+    public int Epoch; 
+    public string? Ver; 
+    public string? Rel; 
+}
