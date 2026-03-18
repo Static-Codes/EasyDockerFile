@@ -1,19 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>library</OutputType>
-    <AssemblyName>dockerfilesharp</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>dockerfilesharp-tests</AssemblyName>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <InvariantGlobalization>false</InvariantGlobalization>
-    <UseNativeXmlSerialization>true</UseNativeXmlSerialization>
-    <!-- <PublishSingleFile>true</PublishSingleFile>		 -->
-
-    <!-- Will ignore publish commands, since this will be a reference for EasyDockerFile -->
-    <IsPublishable>false</IsPublishable> 
-	  <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>		
+		<SelfContained>true</SelfContained>
     <TrimMode>full</TrimMode>
     <StackTraceSupport>false</StackTraceSupport>
     <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
@@ -28,12 +22,10 @@
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <!-- <PublishAOT>true</PublishAOT> -->
-    <Authors>Static-Codes</Authors>
-    <Copyright>Copyright © Static-Codes</Copyright>
-    <PackageTags>console;utility;windows;linux;osx</PackageTags>
   </PropertyGroup>
-  
+
   <ItemGroup>
+    <ProjectReference Include="../DockerFileSharp/DockerFileSharp.csproj" />
   </ItemGroup>
 
 </Project>
