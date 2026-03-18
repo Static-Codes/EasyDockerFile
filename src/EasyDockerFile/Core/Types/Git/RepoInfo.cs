@@ -4,14 +4,6 @@ using Octokit;
 
 namespace EasyDockerFile.Core.Types.Git;
 
-public enum RepoStatus 
-{
-    Public = 0,
-    Private = 1,
-    NotFound = 2,
-    NotSet = 3,
-}
-
 public class RepoInfo(MainMenuSettings settings)
 {
     public RepoUrl RepoUrlObj = RepoUrl.Build(settings.RepoLink);
@@ -22,6 +14,7 @@ public class RepoInfo(MainMenuSettings settings)
     public User? UserInfo = null;
     public IEnumerable<string> BranchNames { get; set; } = [];
     public string? SelectedBranchName { get; set; } = null;
+    public RepoLanguage[] ProjectLanguages { get; set; } = [];
     public IEnumerable<string> FilePaths { get; set; } = [];
     public bool IsPrivate => Status == RepoStatus.Private;
     public bool IsValid => Status != RepoStatus.NotFound && Status != RepoStatus.NotSet;
