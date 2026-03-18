@@ -11,6 +11,8 @@ Project("{0D31F702-682C-4929-B67E-B41DB4E4391F}") = "DockerFileSharp", "DockerFi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerFileSharp.Sandbox", "DockerFileSharp.Sandbox\DockerFileSharp.Sandbox.csproj", "{B2B1BB86-6DEF-4026-9964-AFB3161F60D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCBuild", "SimpleCBuild\SimpleCBuild.csproj", "{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{B2B1BB86-6DEF-4026-9964-AFB3161F60D6}.Release|x64.Build.0 = Release|Any CPU
 		{B2B1BB86-6DEF-4026-9964-AFB3161F60D6}.Release|x86.ActiveCfg = Release|Any CPU
 		{B2B1BB86-6DEF-4026-9964-AFB3161F60D6}.Release|x86.Build.0 = Release|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Debug|x64.Build.0 = Debug|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Debug|x86.Build.0 = Debug|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Release|x64.ActiveCfg = Release|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Release|x64.Build.0 = Release|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Release|x86.ActiveCfg = Release|Any CPU
+		{FABBAAED-B5F0-41E3-B0D5-B0219BA48F2B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

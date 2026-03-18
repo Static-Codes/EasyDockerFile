@@ -21,6 +21,7 @@
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IsPublishable>false</IsPublishable> 
     <!-- <PublishAOT>true</PublishAOT> -->
   </PropertyGroup>
 
