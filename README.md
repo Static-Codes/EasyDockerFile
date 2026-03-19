@@ -2,7 +2,7 @@
 ## Cross platform one-click build utility for native c and C++. 
 
 ## How it will work:
-  - `easy-dockerfile --repo=<path/to/repo>` or `easy-dockerfile --private --repo=<path/to/repo> --token=<OAuthToken>`
+  - `scb --repo=<path/to/repo>` or `scb --private --repo=<path/to/repo> --token=<OAuthToken>`
   - Attempts to authenticate the session (if `--private` is passed)
   - Prompts the user to select a branch to build from.
   - Returns a list of ALL files in that specific branch
