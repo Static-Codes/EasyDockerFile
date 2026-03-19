@@ -8,6 +8,7 @@
   - Returns a list of ALL files in that specific branch
   - Parses these files for specific c/c++ build processes and toolchains
   - Prompts the user to select an architecture to build for.
-  - Creates a container using docker to prevent a dependency hell
+  - Prompts the user to select an output type (either an executable, shared library, or static library).
+  - Creates a container using docker to prevent a dependency hell.
   - Builds for the specified architecture.
-  - Spits out a binary.
+  - Spits out a binary in the selected output type.
