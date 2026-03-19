@@ -63,9 +63,10 @@ public class MainMenuCommand : AsyncCommand<MainMenuSettings>
         await client.UpdateBranchesAsync();
         client.UpdateStatus();
 
-        await client.UpdateFileNamesAsync();
+        await client.UpdateFilesAsync();
+        await client.UpdateProjectLanguagesAsync();
 
-        
+        // Testing client.ToString()
         Console.WriteLine(client);
 
         var families = GetFamilies();

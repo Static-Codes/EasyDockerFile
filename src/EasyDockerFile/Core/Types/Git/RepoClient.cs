@@ -7,6 +7,7 @@ using Spectre.Console;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using static EasyDockerFile.Core.Common.Constants;
 
 public class RepoClient
 {
@@ -39,7 +40,7 @@ public class RepoClient
 
         else {
             client = null;
-            var eMessage = Markup.Escape("[ERROR]: The specified repository requires an OAuth Token to access.");
+            var eMessage = $"{ErrorTag} The specified repository requires an OAuth Token to access.";
             AnsiConsole.MarkupLine($"[red]{eMessage}[/]");
             Console.WriteLine("[INFO]: Please include an OAuth Token in your command.");
             Console.WriteLine("[INFO]: Use the --help flag for more information.");
@@ -48,11 +49,42 @@ public class RepoClient
         return client!;
     }
 
+
+    private static RepoClient CreateRepoClient(GitHubClient client, RepoInfo repoInfo)
+    {
+        var repoClient = new RepoClient(client, repoInfo);
+        
+        // Attempting to capture the last api request info, or silently exiting as a null value will be handled externally.
+        try {
+            repoClient._apiInfo = client.GetLastApiInfo();
+        } 
+        catch {
+            
+        }
+        return repoClient;
+    }
+
     private async Task<IEnumerable<string>> GetFlattenedFileList(string owner, string repoName, string branchName)
     {
         var files = new List<string>();
         await GetFilesRecursivelyAsync(owner, repoName, files, branchName);
         return files;
+    }
+
+    public async Task<int> GetFileCountOfBranch() {
+        if (_repoInfo.SelectedBranch == null) {
+            AnsiConsole.MarkupLine($"[yellow]{WarningTag} _client._repoInfo.SelectedBranch is not set.[/]");
+            AnsiConsole.MarkupLine($"[red]{ErrorTag} _client._repoInfo.SelectedBranch is not set.[/]");
+            Environment.Exit(1);
+        }
+
+        var treeResponse = await _client.Git.Tree.GetRecursive(
+            _repoInfo.RepoUrlObj.Username, 
+            _repoInfo.RepoUrlObj.RepoName, 
+            _repoInfo.SelectedBranch.Commit.Sha
+        );
+
+        return treeResponse.Tree.Count(item => item.Type == TreeType.Blob);
     }
 
     private async Task GetFilesRecursivelyAsync(string owner, string repoName, List<string> files, string branchName, string path = ".") 
@@ -110,18 +142,35 @@ public class RepoClient
         return (true, rateLimitInfo);
     }
   
-    private static RepoClient CreateRepoClient(GitHubClient client, RepoInfo repoInfo)
+    private static void ParseBranchForLanguages(IReadOnlyList<RepositoryLanguage> projectLangs, ref List<RepoLanguage> parsedLangs) 
     {
-        var repoClient = new RepoClient(client, repoInfo);
-        
-        // Attempting to capture the last api request info, or silently exiting as a null value will be handled externally.
-        try {
-            repoClient._apiInfo = client.GetLastApiInfo();
-        } 
-        catch {
-            
+        foreach(var projectLang in projectLangs) 
+        {
+            if (projectLang.Name == "C") {
+                parsedLangs.Add(RepoLanguage.Native_C);
+                continue;
+            }
+
+            if (projectLang.Name == "C++") {
+                parsedLangs.Add(RepoLanguage.C_Plus_Plus);
+                continue;
+            }
+
+            if (projectLang.Name == "CMake") {
+                parsedLangs.Add(RepoLanguage.CMake);
+                continue;
+            }
+
+            if (projectLang.Name == "Makefile") {
+                parsedLangs.Add(RepoLanguage.Makefile);
+                continue;
+            }
+
+            if (projectLang.Name == "Meson") {
+                parsedLangs.Add(RepoLanguage.Meson);
+                continue;
+            }
         }
-        return repoClient;
     }
 
     public async Task UpdateBranchesAsync()
@@ -142,9 +191,11 @@ public class RepoClient
         }
 
         try {
-            branchesObj = await _client.Repository.Branch.GetAll(
-                _repoInfo.RepoUrlObj.Username,
-                _repoInfo.RepoUrlObj.RepoName 
+            _repoInfo.UpdateBranches(
+                await _client.Repository.Branch.GetAll(
+                    _repoInfo.RepoUrlObj.Username,
+                    _repoInfo.RepoUrlObj.RepoName 
+                )
             );
         }
 
@@ -156,16 +207,22 @@ public class RepoClient
             Console.WriteLine("[COMMAND]: easy-dockerfile --private url/to/repo");
             Environment.Exit(1);
         }
+        
+        var branches = _repoInfo.GetBranches() ?? [];
 
-        _repoInfo.BranchNames = branchesObj.Select(branch => branch.Name) ?? [];
 
-        _repoInfo.SelectedBranchName = InputHelper.AskForInput(
+        var branchNameChoice = InputHelper.AskForInput(
             message: "Please select a branch to use from the list below.", 
-            options: _repoInfo.BranchNames
+            options: branches.Select(branch => branch.Name)
         );
+
+        _repoInfo.SelectedBranch = 
+            branches
+            .Where(branch => branch.Name == branchNameChoice)
+            .FirstOrDefault();
     }
 
-    public async Task UpdateFileNamesAsync() {
+    public async Task UpdateFilesAsync() {
 
         if (_repoInfo?.RepoUrlObj?.Username == null) {
             Console.WriteLine("[WARNING]: Unable to retrieve the contents of the repository at the provided uri.");
@@ -179,13 +236,28 @@ public class RepoClient
             Environment.Exit(1);
         }
 
-        if (_repoInfo?.SelectedBranchName == null) {
+        if (_repoInfo?.SelectedBranch == null) {
             Console.WriteLine("[WARNING]: Unable to the contents of the repository at the provided uri.");
-            Console.WriteLine("[ERROR]: Variable '_repoInfo.SelectedBranchName' is null in UpdateFileNamesAsync()");
+            Console.WriteLine("[ERROR]: Variable '_repoInfo.SelectedBranch' is null in UpdateFileNamesAsync()");
             Environment.Exit(1);
         }
 
-        string branchToUse = _repoInfo.SelectedBranchName;
+        _repoInfo.SelectedBranchFileCount = await GetFileCountOfBranch();
+
+        
+        if (_repoInfo.SelectedBranchFileCount > 100) 
+        {
+            Console.WriteLine($"[WARNING]: This repository contains {_repoInfo.SelectedBranchFileCount} files.");
+            
+            if (!AnsiConsole.Confirm("Are you sure you want to continue?")) {
+                Environment.Exit(0);
+            }
+        }
+
+
+        string branchToUse = _repoInfo.SelectedBranch.Name;
+
+        Console.WriteLine($"[INFO]: Retrieving {_repoInfo.SelectedBranchFileCount} files, please wait, this may take some time.");
 
         try 
         {
@@ -208,7 +280,7 @@ public class RepoClient
         var filePaths = await GetFlattenedFileList(
             _repoInfo.RepoUrlObj.Username, 
             _repoInfo.RepoUrlObj.RepoName, 
-            $"refs/heads/{_repoInfo.SelectedBranchName}");
+            $"refs/heads/{_repoInfo.SelectedBranch.Name}");
 
         if (!filePaths.Any()) {
             Console.WriteLine("[WARNING]: Unable to the contents of the repository at the provided uri.");
@@ -219,13 +291,38 @@ public class RepoClient
         _repoInfo.FilePaths = filePaths;
     }
 
+    public async Task UpdateProjectLanguagesAsync() 
+    {
+        var parsedLangs = new List<RepoLanguage>();
+
+        if (_repoInfo?.RepoUrlObj?.Username == null) {
+            Console.WriteLine("[WARNING]: Unable to retrieve the contents of the repository at the provided uri.");
+            Console.WriteLine("[ERROR]: '_repoInfo.RepoUrlObj.Username' is null in UpdateFileNamesAsync()");
+            Environment.Exit(1);
+        }
+
+        if (_repoInfo?.RepoUrlObj?.RepoName == null) {
+            Console.WriteLine("[WARNING]: Unable to the contents of the repository at the provided uri.");
+            Console.WriteLine("[ERROR]: Variable '_repoInfo.RepoUrlObj.RepoName' is null in UpdateFileNamesAsync()");
+            Environment.Exit(1);
+        }
+
+        var projectLangs = await _client.Repository.GetAllLanguages(_repoInfo.RepoUrlObj.Username, _repoInfo.RepoUrlObj.RepoName);
+        
+        ParseBranchForLanguages(projectLangs, ref parsedLangs);
+
+        _repoInfo.ProjectLanguages = parsedLangs;
+        // var projectTopics = await _client.Repository.GetAllTopics(_repoInfo.RepoUrlObj.Username, _repoInfo.RepoUrlObj.RepoName);
+        
+    }
+
     public void UpdateStatus() {
 
         if (_repoInfo == null) {
             Console.WriteLine("[INFO]: _repoInfo is null, skipping _client.UpdateStatus()");
             return;
         }
-        bool branchesExist = _repoInfo.BranchNames.Any();
+        bool branchesExist = _repoInfo.GetBranches() != null;
 
         if (_repoInfo.Status == RepoStatus.NotSet) {
             _repoInfo.Status = branchesExist ? RepoStatus.Public : RepoStatus.NotFound;
@@ -260,9 +357,14 @@ public class RepoClient
             - Public Repos: {_repoInfo.UserInfo?.PublicRepos.ToString() ?? "Not Set"}
         -----------------------------------
         - Branches:
-            {_repoInfo.BranchNames.AsPrettyPrintedBranchString()}
+            {_repoInfo.GetBranches()?.AsPrettyPrintedBranchString()} 
         -----------------------------------
-        - Selected Branch: {_repoInfo.SelectedBranchName ?? "Not Selected"}    
+        - Selected Branch: {_repoInfo.SelectedBranch?.Name ?? "Not Selected"}
+        -----------------------------------
+        - Selected Branch File Count: {_repoInfo.SelectedBranchFileCount?.ToString() ?? "Not Set"}
+        -----------------------------------
+        - Languages in Branch:
+            {_repoInfo.ProjectLanguages.AsPrettyPrintedLanguageList()}
         -----------------------------------
         - Files in Branch:
             {_repoInfo.FilePaths.AsPrettyPrintedPathList()}
