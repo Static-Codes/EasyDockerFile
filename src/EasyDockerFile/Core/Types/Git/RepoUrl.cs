@@ -27,6 +27,10 @@ public class RepoUrl
         return $"{Protocol}://{Domain}/{Username}/{RepoName}";
     }
 
+    public string GetRepoString() {
+        return $"{Username}/{RepoName}";
+    }
+
     public static RepoUrl Build(string? repoURL) 
     {
         if (repoURL == null) {

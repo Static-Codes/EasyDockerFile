@@ -64,6 +64,22 @@ public class RepoClient
         return repoClient;
     }
 
+    public async Task<bool> RepoContainsFile(string fileName) 
+    {   
+        var fileExtension = Path.GetExtension(fileName);
+        var request = new SearchCodeRequest($"extension:{fileExtension}")
+        {
+            FileName = fileName,
+            Repos = { $"{_repoInfo.RepoUrlObj.GetRepoString()}" }
+        };
+
+        // Execute the search
+        var result = await _client.Search.SearchCode(request);
+
+        return result.TotalCount > 0;
+
+    }
+    
     private async Task<IEnumerable<string>> GetFlattenedFileList(string owner, string repoName, string branchName)
     {
         var files = new List<string>();
@@ -137,7 +153,18 @@ public class RepoClient
 
         return (true, rateLimitInfo);
     }
-  
+    
+    /// <summary>
+    ///     Used in UpdateProjectLanguagesAsync()
+    /// </summary>
+    /// 
+    /// <param name="projectLangs">
+    ///     A list of RepositoryLanguages returned by the GithubClient object.
+    /// </param>
+    /// 
+    /// <param name="parsedLangs">
+    ///     A reference to an List<RepoLanguage> that is to be initialized prior to executing this function.
+    /// </param>
     private static void ParseBranchForLanguages(IReadOnlyList<RepositoryLanguage> projectLangs, ref List<RepoLanguage> parsedLangs) 
     {
         foreach(var projectLang in projectLangs) 
@@ -217,8 +244,8 @@ public class RepoClient
             .FirstOrDefault();
     }
 
-    public async Task UpdateFilesAsync() {
-
+    public async Task UpdateFilesAsync() 
+    {
         if (_repoInfo?.RepoUrlObj?.Username == null) {
             WriteWarningMessage("Unable to retrieve the contents of the repository at the provided uri.");
             WriteErrorMessage("'_repoInfo.RepoUrlObj.Username' is null in UpdateFileNamesAsync()", exit: true);
@@ -263,6 +290,7 @@ public class RepoClient
                 branchToUse = repo.DefaultBranch;
             }
         }
+
         catch (NotFoundException) 
         {
             WriteErrorMessage("Branch not found.", exit: true);
